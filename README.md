@@ -1,5 +1,6 @@
 #JSonPowerDB-project
-Title of the Project:  JSonPowerDB-project
+
+Title of the Project: Mini webapp using JSONPowerDB 
 
 Description:
 By using HTML , JavaScript and JsonPowerDB technologies ,
