@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html lang="en">
+<head>
+<title>Bootstrap Example</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet"
+href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script
+src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script
+src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="container">
+<h2>Student Details Form</h2>
+<form id="Student Form" method="post">
+<div class="form-group">
+<span><label for="stuId">Student ID:</label> <label id="stu IdMsg">
+</label></span>
+<input type="text" class="form-control" name="empId" id="stuId"
+placeholder="Enter Student ID" required>
+</div>
+<div class="form-group">
+<label for="stuName">Student Name:</label>
+<input type="text" class="form-control" id="stuName"
+placeholder="Enter Student Name" name="stuName">
+</div>
+<div class="form-group">
+<label for="stuphone">Student Phone Number:</label>
+<input type="text" class="form-control" id="stuphone"
+placeholder="Enter Student Phone Number" name="stuphone">
+</div>
+<div class="form-group">
+<label for="stuEmail">Email:</label>
+<input type="email" class="form-control" id="stuEmail"
+placeholder="Enter student Email" name="stuEmail">
+</div>
+<input type="button" class="btn btn-primary" id="stuSave" value="Save"
+onclick="savestudent();">
+</form>
+</div>
+<script>
+$("#stuId").focus();function validateAndGetFormData() {
+var stuIdVar = $("#stuId").val();
+if (stuIdVar === "") {
+alert("student ID Required Value");
+$("#stuId").focus();
+return "";
+}
+var stuNameVar = $("#stuName").val();
+if (stuNameVar === "") {
+alert("Student Name is Required Value");
+$("#stuName").focus();
+return "";
+}
+var stuphoneVar = $("#stuphone").val();
+if (stuphoneVar === "") {
+alert("Student phone number is Required Value");
+$("#stuphone").focus();
+return "";
+}
+var stuEmailVar = $("#stuEmail").val();
+if (stuEmailVar === "") {
+alert("Student Email is Required Value");
+$("#stuEmail").focus();
+return "";
+}
+var jsonStrObj = {
+stuId: stuIdVar,
+stuName: stuNameVar,
+stuphone: stuphoneVar,
+stuEmail: stuEmailVar,
+};
+return JSON.stringify(jsonStrObj);
+}
+// This method is used to create PUT Json request.
+function createPUTRequest(connToken, jsonObj, dbName, relName) {
+var putRequest = "{\n"
++ "\"token\" : \""
++ connToken
++ "\","
++ "\"dbName\": \""
++ dbName
++ "\",\n" + "\"cmd\" : \"PUT\",\n"
++ "\"rel\" : \""
++ relName + "\","
++ "\"jsonStr\": \n"
++ jsonObj
++ "\n"
++ "}";
+return putRequest;
+}
+function executeCommand(reqString, dbBaseUrl, apiEndPointUrl) {
+var url = dbBaseUrl + apiEndPointUrl;
+var jsonObj;
+$.post(url, reqString, function (result) {
+jsonObj = JSON.parse(result);
+}).fail(function (result) {
+var dataJsonObj = result.responseText;
+jsonObj = JSON.parse(dataJsonObj);
+});
+return jsonObj;
+}
+function resetForm() {
+$("#stuId").val("");
+$("#stuName").val("");
+$("#stuphone").val("");
+$("#stuEmail").val("");
+$("#stuId").focus();
+}
+function savestudent() {var jsonStr = validateAndGetFormData();
+if (jsonStr === "") {
+return;
+}
+var putReqStr = createPUTRequest("90937963|-31949265710185104|90953541",
+jsonStr, "STUDENT", "STUDENT-REL");
+alert(putReqStr);
+jQuery.ajaxSetup({async: false});
+var resultObj = executeCommand(putReqStr,
+"http://api.login2explore.com:5577", "/api/iml");
+alert(JSON.stringify(resultObj));
+jQuery.ajaxSetup({async: true});
+resetForm();
+}
+</script>
+</body>
+</html>
